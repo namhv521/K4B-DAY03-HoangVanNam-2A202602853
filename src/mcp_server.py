@@ -28,18 +28,28 @@ class MCPAcademicServer:
         
     def call_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """
-        [TASK 2.1] HỌC VIÊN HOÀN THIỆN HÀM THỰC THI TOOL TRÊN MCP SERVER
-        Thực thi request gọi Tool theo chuẩn MCP JSON-RPC
+        Thực thi tool và đóng gói kết quả theo JSON-RPC 2.0.
+
+        Tool backend luôn trả JSON string. MCP Server chịu trách nhiệm parse
+        chuỗi đó thành object để Agent nhận Observation có cấu trúc.
         """
-        # --------------------------------------------------------------------------
-        # TODO 2.1: HỌC VIÊN HOÀN THIỆN HÀM GỌI TOOL CHUẨN MCP JSON-RPC
-        # 🎯 YÊU CẦU THỰC THI THUẬT TOÁN:
-        # 1. Gọi hàm dispatch_tool_call(tool_name, arguments) để lấy chuỗi JSON kết quả từ Tool Router.
-        # 2. Chuyển đổi chuỗi JSON kết quả thành Python Dictionary (dùng json.loads).
-        # 3. Đóng gói phản hồi và trả về Dict theo đúng chuẩn giao thức MCP JSON-RPC 2.0:
-        #    - Các trường bắt buộc: "jsonrpc": "2.0", "server": self.server_name, "tool": tool_name, "result": content
-        # --------------------------------------------------------------------------
-        return {}
+        try:
+            raw_result = dispatch_tool_call(tool_name, arguments)
+            content = json.loads(raw_result)
+            if not isinstance(content, dict):
+                raise ValueError("Tool response must be a JSON object")
+        except (json.JSONDecodeError, TypeError, ValueError):
+            content = {
+                "status": "INVALID_TOOL_RESPONSE",
+                "message": "Tool backend không trả về JSON object hợp lệ.",
+            }
+
+        return {
+            "jsonrpc": "2.0",
+            "server": self.server_name,
+            "tool": tool_name,
+            "result": content,
+        }
 
 
 if __name__ == "__main__":
@@ -49,8 +59,11 @@ if __name__ == "__main__":
     
     server = MCPAcademicServer()
     tools = server.list_tools()
-    print(f"✅ Khởi tạo thành công MCP Server: {server.server_name} (Version: {server.version})")
-    print(f"📦 Số lượng Tools công bố: {len(tools)}")
+    print(
+        f"✅ [MCP SERVER] Đã khởi tạo thành công {server.server_name} "
+        f"(Version: {server.version})"
+    )
+    print(f"📦 Số lượng Tools công bố qua MCP: {len(tools)}")
     
     # Kiểm tra trạng thái Task 1.2 (Tool Schemas)
     required_tools = {"query_matching_context", "assign_student_advisor"}
@@ -65,13 +78,13 @@ if __name__ == "__main__":
     else:
         print("⏳ [TASK 1.2]: Matching Tool Schemas chưa đầy đủ trong 'src/tools.py'.")
 
-    # Kiểm tra trạng thái TODO 2.1 (call_tool)
+    # Kiểm tra Task 2.1 (call_tool)
     test_result = server.call_tool(
         "query_matching_context",
         {"query_type": "student_skills", "student_id": "SV001"},
     )
-    if not test_result:
-        print("⏳ [TODO 2.1]: Hàm call_tool() đang trả về rỗng. Học viên hãy hoàn thiện TODO 2.1 trong 'src/mcp_server.py'!")
+    if not test_result.get("result"):
+        print("⏳ [TASK 2.1]: MCP Server chưa trả Observation có dữ liệu.")
     else:
-        print("✅ [TODO 2.1]: Test dispatch tool 'query_matching_context' thành công:")
+        print("✅ [TASK 2.1]: Dispatch tool 'query_matching_context' thành công:")
         print(f"   Phản hồi JSON-RPC: {json.dumps(test_result, ensure_ascii=False)}")

@@ -1,29 +1,285 @@
 [
   {
     "step": 1,
-    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "query": "Bạn có thể hỗ trợ những chức năng nào trong việc ghép cặp sinh viên thực hiện khóa luận với giảng viên hướng dẫn?",
     "action_type": "FINAL_ANSWER",
-    "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool.",
-    "output": "[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-    "latency_ms": 2845.93
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Tôi có thể hỗ trợ bạn trong việc ghép cặp sinh viên với giảng viên hướng dẫn khóa luận thông qua các chức năng sau:\n\n1.  **Tra cứu thông tin:**\n    *   Kỹ năng của sinh viên (student_skills)\n    *   Kỹ năng của giảng viên (advisor_skills)\n    *   Các khóa luận cũ (historical_thesis)\n    *   Độ tương đồng giữa sinh viên và giảng viên (similarity)\n\n2.  **Phân bổ sinh viên–giảng viên:**\n    *   Chạy thử (dry_run) để mô phỏng việc phân bổ và kiểm tra tính tương thích, hạn ngạch.\n    *   Ghi nhận (commit) việc phân bổ sau khi có phê duyệt.\n\nBạn muốn tôi thực hiện chức năng nào?",
+    "latency_ms": 4408.48,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash"
   },
   {
     "step": 1,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Bạn có thể tra cứu các kỹ năng đã được trích xuất của sinh viên SV001 không? Hãy liệt kê kỹ năng chính và nêu nguồn dữ liệu dùng để kết luận.",
     "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
+    "tool_name": "query_matching_context",
     "arguments": {
-      "student_id": "SV2026001"
+      "query_type": "student_skills",
+      "student_id": "SV001"
     },
-    "observation": {},
-    "latency_ms": 799.12
+    "observation": {
+      "status": "SUCCESS",
+      "query_type": "student_skills",
+      "student": {
+        "student_id": "SV001",
+        "student_name": "Nguyễn Minh Anh",
+        "skills": [
+          "Python",
+          "Machine Learning",
+          "Data Analysis",
+          "NLP"
+        ],
+        "primary_role": "Machine Learning",
+        "skill_source": "student_profiles.csv"
+      },
+      "candidates": [
+        {
+          "advisor_id": "GV012",
+          "advisor_name": "TS. Lê Minh An",
+          "skills": [
+            "Machine Learning",
+            "Data Mining",
+            "Fraud Detection",
+            "Python"
+          ],
+          "research_fields": [
+            "Artificial Intelligence",
+            "Financial Analytics"
+          ],
+          "skill_evidence": [
+            {
+              "skill": "Machine Learning",
+              "source": "advisor_skill_evidence.csv",
+              "evidence": "Công trình nghiên cứu và học phần về học máy."
+            },
+            {
+              "skill": "Fraud Detection",
+              "source": "advisor_skill_evidence.csv",
+              "evidence": "Công trình về phát hiện bất thường giao dịch."
+            }
+          ],
+          "quota": 5,
+          "current_load": 3,
+          "remaining_quota": 2,
+          "quota_valid": true,
+          "compatibility": 0.82
+        },
+        {
+          "advisor_id": "GV021",
+          "advisor_name": "TS. Trần Thu Hà",
+          "skills": [
+            "Natural Language Processing",
+            "Deep Learning",
+            "Python"
+          ],
+          "research_fields": [
+            "Artificial Intelligence",
+            "Text Mining"
+          ],
+          "skill_evidence": [
+            {
+              "skill": "Natural Language Processing",
+              "source": "advisor_skill_evidence.csv",
+              "evidence": "Công trình nghiên cứu về xử lý văn bản."
+            }
+          ],
+          "quota": 4,
+          "current_load": 4,
+          "remaining_quota": 0,
+          "quota_valid": false,
+          "compatibility": 0.61
+        }
+      ],
+      "data_version": "mock-curated-2026-09"
+    },
+    "latency_ms": 14733.32,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash",
+    "thought": "Gemini quy?t ??nh g?i c?ng c? 'query_matching_context' v?i tham s?: {\"query_type\": \"student_skills\", \"student_id\": \"SV001\"}"
   },
   {
     "step": 2,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Bạn có thể tra cứu các kỹ năng đã được trích xuất của sinh viên SV001 không? Hãy liệt kê kỹ năng chính và nêu nguồn dữ liệu dùng để kết luận.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
-    "output": "Chưa thể trả lời chi tiết do chưa nhận được dữ liệu từ MCP Server (hãy hoàn thành TODO 2.1).",
-    "latency_ms": 10.0
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Kỹ năng chính của sinh viên SV001 (Nguyễn Minh Anh) là Machine Learning. Nguồn dữ liệu dùng để kết luận kỹ năng này là từ student_profiles.csv.",
+    "latency_ms": 15348.06,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash"
+  },
+  {
+    "step": 1,
+    "query": "Bạn có thể tra cứu các kỹ năng và lĩnh vực nghiên cứu của giảng viên GV012 không? Hãy cho biết bằng chứng nào hỗ trợ từng kỹ năng.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "query_matching_context",
+    "arguments": {
+      "query_type": "advisor_skills",
+      "advisor_id": "GV012"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "query_type": "advisor_skills",
+      "advisor": {
+        "advisor_id": "GV012",
+        "advisor_name": "TS. Lê Minh An",
+        "skills": [
+          "Machine Learning",
+          "Data Mining",
+          "Fraud Detection",
+          "Python"
+        ],
+        "research_fields": [
+          "Artificial Intelligence",
+          "Financial Analytics"
+        ],
+        "skill_evidence": [
+          {
+            "skill": "Machine Learning",
+            "source": "advisor_skill_evidence.csv",
+            "evidence": "Công trình nghiên cứu và học phần về học máy."
+          },
+          {
+            "skill": "Fraud Detection",
+            "source": "advisor_skill_evidence.csv",
+            "evidence": "Công trình về phát hiện bất thường giao dịch."
+          }
+        ],
+        "quota": 5,
+        "current_load": 3,
+        "remaining_quota": 2,
+        "quota_valid": true
+      },
+      "data_version": "mock-curated-2026-09"
+    },
+    "latency_ms": 14606.24,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash",
+    "thought": "Gemini quy?t ??nh g?i c?ng c? 'query_matching_context' v?i tham s?: {\"query_type\": \"advisor_skills\", \"advisor_id\": \"GV012\"}"
+  },
+  {
+    "step": 2,
+    "query": "Bạn có thể tra cứu các kỹ năng và lĩnh vực nghiên cứu của giảng viên GV012 không? Hãy cho biết bằng chứng nào hỗ trợ từng kỹ năng.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Giảng viên TS. Lê Minh An (GV012) có các kỹ năng và lĩnh vực nghiên cứu sau:\n\n**Kỹ năng:**\n*   Machine Learning (Học máy)\n*   Data Mining (Khai phá dữ liệu)\n*   Fraud Detection (Phát hiện gian lận)\n*   Python\n\n**Lĩnh vực nghiên cứu:**\n*   Artificial Intelligence (Trí tuệ nhân tạo)\n*   Financial Analytics (Phân tích tài chính)\n\n**Bằng chứng hỗ trợ kỹ năng:**\n*   **Machine Learning:** Công trình nghiên cứu và học phần về học máy.\n*   **Fraud Detection:** Công trình về phát hiện bất thường giao dịch.",
+    "latency_ms": 15467.52,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash"
+  },
+  {
+    "step": 1,
+    "query": "Bạn có thể đọc và tóm tắt tài liệu khóa luận của sinh viên cũ SV001 không? Chỉ sử dụng tài liệu mà tôi được phép truy cập và cho biết tên tài liệu hoặc nguồn trích xuất.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "query_matching_context",
+    "arguments": {
+      "query_type": "historical_thesis",
+      "student_id": "SV001"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "query_type": "historical_thesis",
+      "student_id": "SV001",
+      "thesis": {
+        "title": "Phát hiện gian lận giao dịch bằng học máy",
+        "summary": "Nghiên cứu sử dụng đặc trưng giao dịch và mô hình học máy để nhận diện giao dịch có nguy cơ gian lận.",
+        "technologies": [
+          "Python",
+          "scikit-learn",
+          "Pandas"
+        ],
+        "source": "theses.csv",
+        "access_level": "authorized_for_lab"
+      },
+      "data_version": "mock-curated-2026-09"
+    },
+    "latency_ms": 14354.83,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash",
+    "thought": "Gemini quy?t ??nh g?i c?ng c? 'query_matching_context' v?i tham s?: {\"query_type\": \"historical_thesis\", \"student_id\": \"SV001\"}"
+  },
+  {
+    "step": 2,
+    "query": "Bạn có thể đọc và tóm tắt tài liệu khóa luận của sinh viên cũ SV001 không? Chỉ sử dụng tài liệu mà tôi được phép truy cập và cho biết tên tài liệu hoặc nguồn trích xuất.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Tài liệu khóa luận của sinh viên SV001 có tiêu đề \"Phát hiện gian lận giao dịch bằng học máy\" đã được tóm tắt như sau:\n\n**Tóm tắt:** Nghiên cứu sử dụng đặc trưng giao dịch và mô hình học máy để nhận diện giao dịch có nguy cơ gian lận.\n**Công nghệ sử dụng:** Python, scikit-learn, Pandas\n**Nguồn:** theses.csv\n**Mức độ truy cập:** authorized_for_lab",
+    "latency_ms": 15754.06,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash"
+  },
+  {
+    "step": 1,
+    "query": "Dựa trên kỹ năng và nội dung khóa luận của sinh viên SV001, hãy đánh giá mức độ tương đồng với chuyên môn của giảng viên GV012. Trình bày điểm compatibility, các bằng chứng chính, quota còn lại và chỉ đưa ra khuyến nghị, chưa tạo phân bổ chính thức.",
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "query_matching_context",
+    "arguments": {
+      "advisor_id": "GV012",
+      "student_id": "SV001",
+      "query_type": "similarity"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "query_type": "similarity",
+      "student": {
+        "student_id": "SV001",
+        "skills": [
+          "Python",
+          "Machine Learning",
+          "Data Analysis",
+          "NLP"
+        ],
+        "thesis_title": "Phát hiện gian lận giao dịch bằng học máy",
+        "thesis_source": "theses.csv"
+      },
+      "advisor": {
+        "advisor_id": "GV012",
+        "advisor_name": "TS. Lê Minh An",
+        "skills": [
+          "Machine Learning",
+          "Data Mining",
+          "Fraud Detection",
+          "Python"
+        ],
+        "research_fields": [
+          "Artificial Intelligence",
+          "Financial Analytics"
+        ],
+        "skill_evidence": [
+          {
+            "skill": "Machine Learning",
+            "source": "advisor_skill_evidence.csv",
+            "evidence": "Công trình nghiên cứu và học phần về học máy."
+          },
+          {
+            "skill": "Fraud Detection",
+            "source": "advisor_skill_evidence.csv",
+            "evidence": "Công trình về phát hiện bất thường giao dịch."
+          }
+        ],
+        "quota": 5,
+        "current_load": 3,
+        "remaining_quota": 2,
+        "quota_valid": true,
+        "compatibility": 0.82
+      },
+      "compatibility_method": "precomputed_mock_matching_service",
+      "data_version": "mock-curated-2026-09",
+      "model_version": "mock-policy-v1"
+    },
+    "latency_ms": 15240.07,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash",
+    "thought": "Gemini quy?t ??nh g?i c?ng c? 'query_matching_context' v?i tham s?: {\"advisor_id\": \"GV012\", \"student_id\": \"SV001\", \"query_type\": \"similarity\"}"
+  },
+  {
+    "step": 2,
+    "query": "Dựa trên kỹ năng và nội dung khóa luận của sinh viên SV001, hãy đánh giá mức độ tương đồng với chuyên môn của giảng viên GV012. Trình bày điểm compatibility, các bằng chứng chính, quota còn lại và chỉ đưa ra khuyến nghị, chưa tạo phân bổ chính thức.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Dựa trên phân tích, mức độ tương đồng giữa sinh viên SV001 và giảng viên GV012 là 0.82.\n\n**Các bằng chứng chính:**\n*   **Kỹ năng của SV001:** Python, Machine Learning, Data Analysis, NLP.\n*   **Kỹ năng của GV012:** Machine Learning, Data Mining, Fraud Detection, Python.\n*   **Minh chứng kỹ năng GV012:**\n    *   Machine Learning: Công trình nghiên cứu và học phần về học máy.\n    *   Fraud Detection: Công trình về phát hiện bất thường giao dịch.\n*   **Đề tài khóa luận của SV001:** \"Phát hiện gian lận giao dịch bằng học máy\" rất phù hợp với chuyên môn Phát hiện gian lận (Fraud Detection) và Học máy (Machine Learning) của GV012.\n\n**Thông tin về quota của GV012:**\n*   Tổng quota: 5\n*   Tải hiện tại: 3\n*   Quota còn lại: 2\n\n**Khuyến nghị:**\nVới điểm tương đồng cao (0.82) và sự phù hợp rõ ràng giữa đề tài của sinh viên với chuyên môn của giảng viên, cùng với việc giảng viên GV012 vẫn còn 2 suất trong quota, tôi khuyến nghị phân công sinh viên SV001 cho giảng viên GV012.",
+    "latency_ms": 15991.77,
+    "provider": "GeminiProvider",
+    "model": "gemini-2.5-flash"
   }
 ]

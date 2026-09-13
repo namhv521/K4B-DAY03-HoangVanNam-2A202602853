@@ -84,48 +84,47 @@
 
 ### 3.1. MCP Server
 
-- [ ] Hoàn thiện `MCPAcademicServer.call_tool()` trong `src/mcp_server.py`:
+- [x] Hoàn thiện `MCPAcademicServer.call_tool()` trong `src/mcp_server.py`:
   - gọi `dispatch_tool_call(tool_name, arguments)`;
   - dùng `json.loads()` chuyển kết quả thành dictionary;
   - trả phản hồi có `jsonrpc: "2.0"`, `server`, `tool` và `result`.
-- [ ] Xóa/giải quyết marker `TODO 2.1`; hàm không còn trả `{}` mặc định.
-- [ ] Chạy `python src/mcp_server.py`.
-- [ ] Xác nhận MCP Server khởi tạo thành công và công bố đúng hai tools.
-- [ ] Xác nhận phép thử `academic_query` trả phản hồi JSON-RPC có dữ liệu.
+- [x] Xóa/giải quyết marker `TODO 2.1`; hàm không còn trả `{}` mặc định.
+- [x] Chạy `python src/mcp_server.py`.
+- [x] Xác nhận MCP Server khởi tạo thành công và công bố đúng hai tools.
+- [x] Xác nhận `query_matching_context` trả phản hồi JSON-RPC có dữ liệu.
 
 ### 3.2. ReAct Agent
 
-- [ ] Rà soát/hoàn thiện `run_react_agent()` trong `src/app.py`.
-- [ ] Xác nhận vòng lặp giới hạn bởi `MAX_ITERATIONS`.
-- [ ] Xử lý đúng phản hồi `type == "text"` để tạo Final Answer và dừng.
-- [ ] Xử lý đúng phản hồi `type == "tool_call"`:
+- [x] Rà soát/hoàn thiện `run_react_agent()` trong `src/app.py`.
+- [x] Xác nhận vòng lặp giới hạn bởi `MAX_ITERATIONS`.
+- [x] Xử lý đúng phản hồi `type == "text"` để tạo Final Answer và dừng.
+- [x] Xử lý đúng phản hồi `type == "tool_call"`:
   - lấy tên tool và arguments;
   - gọi MCP Server;
   - ghi Observation;
   - dùng kết quả tool để tạo Final Answer.
-- [ ] Xác nhận trace có đủ chuỗi
+- [x] Xác nhận trace có đủ chuỗi
       Thought → Action → Observation → Final Answer.
-- [ ] Xác nhận Agent không bịa dữ liệu khi tool trả `NOT_FOUND` hoặc lỗi.
+- [x] Xác nhận Agent không bịa dữ liệu khi tool trả `NOT_FOUND` hoặc lỗi.
 
 ### Checkpoint 2
 
-- [ ] `python src/mcp_server.py` chạy không lỗi.
-- [ ] `python src/app.py --all` chạy không gặp lỗi code.
-- [ ] Observation từ MCP không còn là object rỗng `{}`.
+- [x] `python src/mcp_server.py` chạy không lỗi.
+- [x] `python src/app.py --all` chạy không gặp lỗi code ở chế độ mock offline.
+- [x] Observation từ MCP không còn là object rỗng `{}`.
 
 ## 4. Phần 3 — Test Execution & Waterfall Trace (45 phút)
 
-- [x] `.env` có ít nhất một API key được cấu hình, nhưng chưa có bằng chứng
-      trong báo cáo để xác nhận lần chạy nghiệm thu dùng LLM thật.
-- [ ] Chạy đủ năm test case bằng LLM API thật với
+- [x] `.env` có API key thật và log nghiệm thu xác nhận dùng `GeminiProvider`.
+- [x] Chạy đủ năm test case bằng LLM API thật với
       `python src/app.py --all`.
-- [ ] Thử chế độ tương tác bằng `python src/app.py --interactive`, sau đó gõ
+- [x] Thử chế độ tương tác bằng `python src/app.py --interactive`, sau đó gõ
       `exit` hoặc `quit` để thoát.
 - [x] File `docs/trace_waterfall.json` đã tồn tại.
-- [ ] Tạo lại `docs/trace_waterfall.json` sau khi hoàn thiện code và test cases.
-- [ ] Xác nhận trace mới đến từ LLM API thật, không phải
+- [x] Tạo lại `docs/trace_waterfall.json` sau khi hoàn thiện code và test cases.
+- [x] Xác nhận trace mới đến từ LLM API thật, không phải
       `MockOfflineProvider`/`Mock Agent Response`.
-- [ ] Xác nhận trace chứa đủ:
+- [x] Xác nhận trace chứa đủ:
   - số bước (`step`);
   - câu hỏi (`query`);
   - suy luận (`thought`);
@@ -134,26 +133,26 @@
   - Observation có dữ liệu;
   - Final Answer;
   - độ trễ `latency_ms`.
-- [ ] Xác nhận cả 5/5 test case thành công và hành vi khớp
+- [x] Xác nhận cả 5/5 test case thành công và hành vi khớp
       `expected_behavior`.
 
 ## 5. Hoàn thiện báo cáo `docs/trace_eval.md`
 
-- [ ] Thay toàn bộ placeholder `[Điền ...]` bằng thông tin thật.
-- [ ] Hoàn thiện Agentic Fit Scoring Matrix và tổng điểm.
-- [ ] Thay đoạn JSON mẫu bằng một trace tiêu biểu lấy từ lần chạy API thật.
-- [ ] Đánh dấu đã dùng API thật sau khi kiểm chứng.
-- [ ] Điền tổng số test case chạy thành công trên tổng số 5.
-- [ ] Điền số lượt gọi tool chính xác qua MCP Server.
+- [x] Thay toàn bộ placeholder `[Điền ...]` bằng thông tin thật.
+- [x] Hoàn thiện Agentic Fit Scoring Matrix và tổng điểm.
+- [x] Thay đoạn JSON mẫu bằng một trace tiêu biểu lấy từ lần chạy API thật.
+- [x] Đánh dấu đã dùng API thật sau khi kiểm chứng.
+- [x] Điền tổng số test case chạy thành công trên tổng số 5.
+- [x] Điền số lượt gọi tool chính xác qua MCP Server.
 - [ ] Ghi nhận trạng thái Commit/Push sau khi đã thực hiện thật.
 
 ## 6. Self-audit theo rubric 100%
 
-- [ ] **Agentic Fit & Tool Specs (25%):** có Scoring Matrix đầy đủ, năm test
+- [x] **Agentic Fit & Tool Specs (25%):** có Scoring Matrix đầy đủ, năm test
       case tùy biến và hai Tool Schema hợp lệ.
-- [ ] **ReAct Loop & MCP Integration (35%):** ReAct Loop và Native Tool
+- [x] **ReAct Loop & MCP Integration (35%):** ReAct Loop và Native Tool
       Calling chạy qua MCP Server bằng Gemini/OpenAI API thật.
-- [ ] **Waterfall Trace & Observation (25%):** trace có đầy đủ Thought,
+- [x] **Waterfall Trace & Observation (25%):** trace có đầy đủ Thought,
       Action, Observation, Final Answer và `latency_ms`.
 - [ ] **Git Repository & Submission (15%):** repository sạch, đủ artifact,
       commit/push và nộp đúng hạn.
@@ -173,11 +172,6 @@
 
 ## 8. Các vấn đề đang chặn nghiệm thu
 
-- [ ] `src/mcp_server.py`: `call_tool()` vẫn trả dictionary rỗng.
-- [ ] `docs/trace_waterfall.json`: trace hiện tại có `Mock Agent Response` và
-      Observation rỗng, chưa đạt yêu cầu API thật.
-- [ ] `docs/trace_eval.md`: phần trace API thật và kết quả nghiệm thu vẫn chưa
-      được điền.
 - [ ] `.venv` chưa tồn tại trong máy tại thời điểm rà soát.
 
 ## 9. Lệnh kiểm tra cuối
@@ -190,8 +184,8 @@ git status
 
 Kết quả tối thiểu trước khi nộp:
 
-- [ ] MCP Server công bố hai tools và gọi tool thành công.
-- [ ] Test suite báo 5/5 test case đã thực thi, 0 test case còn `TODO`.
-- [ ] Trace được tạo từ LLM thật, Observation không rỗng.
-- [ ] Báo cáo không còn placeholder.
+- [x] MCP Server công bố hai tools và gọi tool thành công.
+- [x] Test suite báo 5/5 test case đã thực thi, 0 test case còn `TODO`.
+- [x] Trace được tạo từ LLM thật, Observation không rỗng.
+- [x] Báo cáo không còn placeholder.
 - [ ] GitHub có đầy đủ artifact và link đã được nộp trên VLearn.

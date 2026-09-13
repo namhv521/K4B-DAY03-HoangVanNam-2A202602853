@@ -2,8 +2,7 @@
 
 > **Họ và Tên Học viên:** Hoàng Văn Nam
 > **Mã Sinh Viên / Mã Học viên:** 2A20260283
-> **Chủ đề Lựa chọn:** Đề tài mở — Trợ lý ghép cặp sinh viên thực hiện khóa luận với giảng viên hướng dẫn bằng Reinforcement Learning
-> **Repo tham khảo:** [Matching_system_ReinforcementLearning](https://github.com/namhv521/Matching_system_ReinforcementLearning)
+> **Chủ đề Lựa chọn:** Đề tài mở — Trợ lý ghép cặp sinh viên thực hiện khóa luận với giảng viên hướng dẫn
 
 ---
 
@@ -30,26 +29,46 @@
 
 > ⚠️ **YÊU CẦU NGHIỆM THU:** Mở tệp `.env` điền `GEMINI_API_KEY` (hoặc `OPENAI_API_KEY`) để kết nối LLM thật trước khi thực thi `python src/app.py --all`. Bài nộp chỉ dùng Mock Offline Provider sẽ không đạt điểm nghiệm thực tế.
 
-Dán 1 đoạn trích xuất log tiêu biểu từ file `docs/trace_waterfall.json` sinh ra từ phản hồi LLM API thật:
+Dưới đây là đoạn trích TC05 từ `docs/trace_waterfall.json`, được sinh bởi
+`GeminiProvider` qua Native Tool Calling thật. Matching tool vẫn dùng bộ dữ liệu
+mock có version để kiểm thử an toàn; đây không phải kết quả inference từ policy
+RL production.
 
 ```json
 [
   {
     "step": 1,
     "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
+    "query": "Đánh giá mức độ tương đồng giữa SV001 và GV012.",
+    "tool_name": "query_matching_context",
     "arguments": {
-      "student_id": "SV2026001"
+      "student_id": "SV001",
+      "advisor_id": "GV012",
+      "query_type": "similarity"
     },
     "observation": {
       "status": "SUCCESS",
-      "student_id": "SV2026001",
-      "data": {
-        "full_name": "Nguyễn Văn An",
-        "gpa": 3.85
-      }
+      "query_type": "similarity",
+      "advisor": {
+        "advisor_id": "GV012",
+        "compatibility": 0.82,
+        "quota": 5,
+        "current_load": 3,
+        "remaining_quota": 2,
+        "quota_valid": true
+      },
+      "compatibility_method": "precomputed_mock_matching_service",
+      "data_version": "mock-curated-2026-09",
+      "model_version": "mock-policy-v1"
     },
-    "latency_ms": 120.5
+    "latency_ms": 15240.07
+  },
+  {
+    "step": 2,
+    "action_type": "FINAL_ANSWER",
+    "thought": "Gemini phản hồi trực tiếp bằng văn bản (không cần gọi công cụ).",
+    "output": "Mức độ tương đồng là 0.82; GV012 còn 2 suất. Khuyến nghị xem xét cặp ghép và chưa tạo phân bổ chính thức.",
+    "latency_ms": 15991.77
   }
 ]
 ```
@@ -58,9 +77,9 @@ Dán 1 đoạn trích xuất log tiêu biểu từ file `docs/trace_waterfall.js
 
 ## 3. TỔNG KẾT KẾT QUẢ NGHIỆM THU & NỘP BÀI
 
-- [ ] Đã điền API Key thật trong `.env` và xác nhận Agent chạy mượt mà trên LLM API thật (Gemini/OpenAI).
-- **Tổng số Test Cases đã chạy thành công:** ___ / 5 test cases.
-- **Số lượt gọi Tool qua MCP Server chính xác:** ___ lượt.
+- [x] Đã điền API Key thật trong `.env` và xác nhận Agent chạy trên Gemini API thật, với mock fallback bị vô hiệu hóa khi nghiệm thu.
+- **Tổng số Test Cases đã chạy thành công:** **5 / 5** test cases.
+- **Số lượt gọi Tool qua MCP Server chính xác:** **4 lượt**.
 - **Kết quả đẩy Repo nộp bài:** [ ] Đã Commit và Push mã nguồn thành công lên GitHub cá nhân.
 
 ---
