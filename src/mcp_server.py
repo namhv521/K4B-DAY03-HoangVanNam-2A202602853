@@ -52,17 +52,26 @@ if __name__ == "__main__":
     print(f"✅ Khởi tạo thành công MCP Server: {server.server_name} (Version: {server.version})")
     print(f"📦 Số lượng Tools công bố: {len(tools)}")
     
-    # Kiểm tra trạng thái TODO 1.2 (Tool Schema)
-    sched_tool = next((t for t in tools if t.get("name") == "schedule_appointment"), None)
-    if sched_tool and not sched_tool.get("parameters", {}).get("properties"):
-        print("⏳ [TODO 1.2]: Tool 'schedule_appointment' chưa được định nghĩa properties trong 'src/tools.py'.")
+    # Kiểm tra trạng thái Task 1.2 (Tool Schemas)
+    required_tools = {"query_matching_context", "assign_student_advisor"}
+    published_tools = {tool.get("name") for tool in tools}
+    schemas_complete = all(
+        tool.get("parameters", {}).get("properties")
+        and tool.get("parameters", {}).get("required")
+        for tool in tools
+    )
+    if required_tools.issubset(published_tools) and schemas_complete:
+        print("✅ [TASK 1.2]: Hai Matching Tool Schemas đã được khai báo đầy đủ.")
     else:
-        print("✅ [TODO 1.2]: Tool 'schedule_appointment' đã có schema đầy đủ.")
+        print("⏳ [TASK 1.2]: Matching Tool Schemas chưa đầy đủ trong 'src/tools.py'.")
 
     # Kiểm tra trạng thái TODO 2.1 (call_tool)
-    test_result = server.call_tool("academic_query", {"student_id": "SV2026001"})
+    test_result = server.call_tool(
+        "query_matching_context",
+        {"query_type": "student_skills", "student_id": "SV001"},
+    )
     if not test_result:
         print("⏳ [TODO 2.1]: Hàm call_tool() đang trả về rỗng. Học viên hãy hoàn thiện TODO 2.1 trong 'src/mcp_server.py'!")
     else:
-        print(f"✅ [TODO 2.1]: Test dispatch tool 'academic_query' thành công:")
+        print("✅ [TODO 2.1]: Test dispatch tool 'query_matching_context' thành công:")
         print(f"   Phản hồi JSON-RPC: {json.dumps(test_result, ensure_ascii=False)}")

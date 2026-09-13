@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "capability_query",
+    "question": "Bạn có thể hỗ trợ những chức năng nào trong việc ghép cặp sinh viên thực hiện khóa luận với giảng viên hướng dẫn?",
+    "expected_behavior": "Agent trả lời trực tiếp từ System Prompt, giới thiệu đúng phạm vi tra cứu skill, đọc tài liệu được cấp quyền và đánh giá độ tương đồng; không tuyên bố có thể tự động phân bổ chính thức và không cần gọi Tool.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "student_skill_lookup",
+    "question": "Bạn có thể tra cứu các kỹ năng đã được trích xuất của sinh viên SV001 không? Hãy liệt kê kỹ năng chính và nêu nguồn dữ liệu dùng để kết luận.",
+    "expected_behavior": "Agent gọi Tool tra cứu ngữ cảnh matching với student_id='SV001', chỉ liệt kê skill có trong Observation, kèm nguồn hoặc phiên bản dữ liệu; không tự suy đoán kỹ năng còn thiếu.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "advisor_skill_lookup",
+    "question": "Bạn có thể tra cứu các kỹ năng và lĩnh vực nghiên cứu của giảng viên GV012 không? Hãy cho biết bằng chứng nào hỗ trợ từng kỹ năng.",
+    "expected_behavior": "Agent gọi Tool tra cứu ngữ cảnh matching với advisor_id='GV012', trả đúng skill, lĩnh vực nghiên cứu và evidence từ Observation; nếu không có bằng chứng thì phải nói rõ thay vì bịa dữ liệu.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "historical_thesis_lookup",
+    "question": "Bạn có thể đọc và tóm tắt tài liệu khóa luận của sinh viên cũ SV001 không? Chỉ sử dụng tài liệu mà tôi được phép truy cập và cho biết tên tài liệu hoặc nguồn trích xuất.",
+    "expected_behavior": "Agent kiểm tra quyền truy cập rồi gọi Tool đọc dữ liệu khóa luận của student_id='SV001', tóm tắt đúng nội dung trong Observation và nêu nguồn; phải trả NOT_FOUND hoặc ACCESS_DENIED phù hợp nếu tài liệu không tồn tại hoặc không được cấp quyền.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "multi_step_similarity_evaluation",
+    "question": "Dựa trên kỹ năng và nội dung khóa luận của sinh viên SV001, hãy đánh giá mức độ tương đồng với chuyên môn của giảng viên GV012. Trình bày điểm compatibility, các bằng chứng chính, quota còn lại và chỉ đưa ra khuyến nghị, chưa tạo phân bổ chính thức.",
+    "expected_behavior": "Agent thực hiện ReAct đa bước để lấy hồ sơ sinh viên, tài liệu khóa luận, skill giảng viên và trạng thái quota; sau đó dùng kết quả compatibility từ Tool hoặc matching service để giải thích khuyến nghị. Agent không tự tính/bịa điểm, không gọi chế độ commit và không khuyến nghị giảng viên đã hết quota.",
+    "complexity": "High"
+  }
+]

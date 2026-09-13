@@ -1,8 +1,9 @@
 # 📊 BÁO CÁO THU HOẠCH NGHIỆM THU BÀI LAB 3 (BƯỚC 3 — SUBMISSION ARTIFACT)
 
-> **Họ và Tên Học viên:** [Điền Họ và Tên]  
-> **Mã Sinh Viên / Mã Học viên:** [Điền MSSV]  
-> **Chủ đề Lựa chọn:** [Điền tên chủ đề đã chọn từ docs/DANH_SACH_DE_TAI.md hoặc Đề tài Mở]  
+> **Họ và Tên Học viên:** Hoàng Văn Nam
+> **Mã Sinh Viên / Mã Học viên:** 2A20260283
+> **Chủ đề Lựa chọn:** Đề tài mở — Trợ lý ghép cặp sinh viên thực hiện khóa luận với giảng viên hướng dẫn bằng Reinforcement Learning
+> **Repo tham khảo:** [Matching_system_ReinforcementLearning](https://github.com/namhv521/Matching_system_ReinforcementLearning)
 
 ---
 
@@ -10,11 +11,18 @@
 
 | Tiêu chí Đánh giá | Mức độ (1 - 5) | Giải trình chi tiết lý do chọn điểm |
 | :--- | :---: | :--- |
-| **1. Multi-step Reasoning** | / 5 | Bài toán có yêu cầu chia nhỏ nhiều bước suy luận nối tiếp nhau không? |
-| **2. Tool Interaction** | / 5 | Hệ thống có cần kết nối với MCP Server / Cơ sở dữ liệu bên ngoài không? |
-| **3. Dynamic Decision** | / 5 | Bước tiếp theo có phụ thuộc vào kết quả quan sát bước trước không? |
-| **4. Long Horizon Goal** | / 5 | Hệ thống có phải giữ mục tiêu xuyên suốt qua nhiều lượt xử lý không? |
-| **TỔNG ĐIỂM AGENTIC FIT** | **/ 20** | *Nếu tổng điểm > 12/20: Bài toán rất phù hợp triển khai Agentic System.* |
+| **1. Multi-step Reasoning** | **4 / 5** | Quy trình gồm nhiều bước: đọc hồ sơ và đề tài, truy xuất kỹ năng giảng viên, tính compatibility, kiểm tra quota/workload rồi đề xuất cặp ghép. Tuy nhiên, phần lớn bước xử lý có cấu trúc và có thể triển khai bằng pipeline hoặc thuật toán tối ưu cố định, nên chưa cần mức suy luận mở cao nhất. |
+| **2. Tool Interaction** | **3 / 5** | Tác tử dự kiến dùng `query_matching_context` để tra cứu dữ liệu và `assign_student_advisor` để ghi nhận phân bổ qua MCP Server. Dù vậy, repo tham khảo hiện tập trung vào pipeline dữ liệu và huấn luyện RL; lớp ứng dụng inference/MCP chưa phải thành phần hoàn thiện, nên nhu cầu tương tác tool ở mức khá thay vì bắt buộc xuyên suốt. |
+| **3. Dynamic Decision** | **4 / 5** | Lựa chọn giảng viên cho sinh viên hiện tại phụ thuộc vào capacity và workload sau các assignment trước; action masking cũng loại bỏ giảng viên đã đầy quota. Quyết định có tính động rõ ràng nhưng chủ yếu diễn ra trong môi trường và policy RL đã định nghĩa, không phải mọi bước đều cần Agent tự lập kế hoạch lại. |
+| **4. Long Horizon Goal** | **3 / 5** | Hệ thống phải duy trì mục tiêu compatibility, fairness và quota trong suốt một cohort, vì lựa chọn hiện tại ảnh hưởng các sinh viên sau. Tuy nhiên, horizon kết thúc trong một episode phân bổ và phiên bản hiện tại chưa có memory, feedback đáng tin cậy hay tự điều chỉnh mục tiêu qua nhiều cohort. |
+| **TỔNG ĐIỂM AGENTIC FIT** | **14 / 20** | **14 > 12:** Bài toán phù hợp triển khai Agentic System, nhưng mức phù hợp chỉ ở ngưỡng khá. Agent hữu ích để điều phối tra cứu, giải thích và xác nhận phân bổ; lõi tối ưu vẫn nên do pipeline và policy RL đảm nhiệm. |
+
+### Phạm vi tác tử dự kiến
+
+- **Đầu vào:** hồ sơ/đề tài của sinh viên; chuyên môn, kỹ năng, quota và workload của giảng viên.
+- **Tool tra cứu — `query_matching_context`:** lấy hồ sơ liên quan, compatibility và danh sách giảng viên còn capacity.
+- **Tool hành động — `assign_student_advisor`:** kiểm tra hard constraint và ghi nhận cặp sinh viên–giảng viên được chọn.
+- **Mục tiêu:** tạo phân bổ có compatibility cao, cân bằng workload và không vi phạm quota; kết quả cần được quản trị viên hoặc hội đồng chuyên môn duyệt trước khi áp dụng.
 
 ---
 
